@@ -39,7 +39,7 @@ function queryDocker(path: string): Promise<unknown> {
 
 export async function GET() {
   try {
-    const result = await queryDocker('/v1.41/containers/json?all=true');
+    const result = await queryDocker('/v1.44/containers/json?all=true');
 
     if (!Array.isArray(result)) {
       throw new Error('Docker API did not return array of containers');
