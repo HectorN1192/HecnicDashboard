@@ -91,27 +91,21 @@ import { projects } from '../data/projects';
           document.getElementById('last-update').textContent = now;
 
           // Para cada proyecto con contenedor, actualizar su estado
-          const cards = document.querySelectorAll('.bg-white');
+          const cards = document.querySelectorAll('[data-container]');
           cards.forEach((card) => {
-            const projectName =
-              card.querySelector('.text-xl')?.textContent || '';
-            // Buscar el contenedor correspondiente en el estado
-            for (const [containerName, containerStatus] of Object.entries(
-              status
-            )) {
-              // Mapeo simple: si el nombre del proyecto está en el nombre del contenedor
-              if (containerName.includes(projectName.toLowerCase())) {
-                const statusDot = card.querySelector('.rounded-full');
-                const statusLabel = card.querySelector('.text-xs');
+            const containerName = card.getAttribute('data-container');
+            if (!containerName || !(containerName in status)) return;
 
-                if (statusDot && statusLabel) {
-                  const isRunning = containerStatus === 'running';
-                  statusDot.className =
-                    'w-3 h-3 rounded-full ' +
-                    (isRunning ? 'bg-green-500' : 'bg-yellow-500');
-                  statusLabel.textContent = isRunning ? 'Activo' : 'Detenido';
-                }
-              }
+            const containerStatus = status[containerName];
+            const statusDot = card.querySelector('.rounded-full');
+            const statusLabel = card.querySelector('.text-xs');
+
+            if (statusDot && statusLabel) {
+              const isRunning = containerStatus === 'running';
+              statusDot.className =
+                'w-3 h-3 rounded-full ' +
+                (isRunning ? 'bg-green-500' : 'bg-yellow-500');
+              statusLabel.textContent = isRunning ? 'Activo' : 'Detenido';
             }
           });
         } catch (error) {
