@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hecnic Dashboard - Colorful</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            color: #1a1a1a;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+        }
+
+        .theme-toggle {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .header-section {
+            margin-bottom: 3rem;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(240, 147, 251, 0.2) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .header-section h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-section p {
+            color: #666;
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .project-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border: none;
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .project-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .project-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .card-status {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            transition: all 0.3s;
+        }
+
+        .status-dot.active {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            box-shadow: 0 0 15px rgba(79, 172, 254, 0.6);
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+
+        .status-dot.error {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .card-tag {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .card-description {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-footer {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .card-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .card-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+        }
+
+        .footer {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.875rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            margin-top: 3rem;
+        }
+
+        .last-update {
+            font-weight: 700;
+            color: white;
+        }
+
+        html.dark {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #533483 75%, #2a4a6a 100%);
+            background-size: 400% 400%;
+            animation: gradient-dark 15s ease infinite;
+        }
+
+        @keyframes gradient-dark {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        html.dark header {
+            background: rgba(26, 26, 46, 0.95);
+        }
+
+        html.dark .logo,
+        html.dark .card-title,
+        html.dark .header-section h1 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        html.dark .header-section,
+        html.dark .project-card {
+            background: rgba(26, 26, 46, 0.9);
+        }
+
+        html.dark .header-section p,
+        html.dark .card-description {
+            color: #a0a0a0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">✨ Hecnic</div>
+        <button class="theme-toggle" onclick="toggleTheme()">
+            <span id="theme-icon">🌙</span>
+        </button>
+    </header>
+
+    <div class="container">
+        <div class="header-section">
+            <h1>Dashboard</h1>
+            <p>Acceso centralizado a todos tus proyectos</p>
+        </div>
+
+        <div class="projects-grid" id="projects-grid">
+            <!-- Projects will be rendered here -->
+        </div>
+
+        <div class="footer">
+            <p>Última actualización: <span class="last-update" id="last-update">Cargando...</span></p>
+        </div>
+    </div>
+
+    <script>
+        const projects = [
+            {
+                name: 'HecnicWeb',
+                description: 'Landing page pública de Construcciones Hecnic',
+                url: 'https://construccioneshecnic.es',
+                container: 'hecnic-landing',
+                tag: 'Producción',
+            },
+            {
+                name: 'HecnicApp',
+                description: 'App de gestión interna para Construcciones Hecnic',
+                url: 'https://construccioneshecnic.es/app',
+                container: 'hecnic-web',
+                tag: 'Producción',
+            },
+            {
+                name: 'CuentasPersonales',
+                description: 'Gestión de finanzas personales',
+                url: null,
+                container: null,
+                tag: 'En desarrollo',
+            },
+        ];
+
+        let containerStatus = {};
+
+        async function updateStatus() {
+            try {
+                const response = await fetch('/dashboard/api/status.json');
+                if (response.ok) {
+                    containerStatus = await response.json();
+                }
+            } catch (e) {
+                console.error('Error fetching status:', e);
+            }
+
+            updateProjectCards();
+            updateTimestamp();
+        }
+
+        function updateProjectCards() {
+            const grid = document.getElementById('projects-grid');
+            grid.innerHTML = projects.map(project => {
+                const status = containerStatus[project.container] || null;
+                const isActive = status === 'running';
+
+                return `
+                    <div class="project-card">
+                        <div class="card-header">
+                            <div class="card-title">${project.name}</div>
+                            ${project.container ? `
+                                <div class="card-status">
+                                    <div class="status-dot ${isActive ? 'active' : status === 'exited' ? '' : 'error'}"></div>
+                                    <span>${isActive ? 'Activo' : 'Detenido'}</span>
+                                </div>
+                            ` : ''}
+                        </div>
+                        <div class="card-tag">${project.tag}</div>
+                        <p class="card-description">${project.description}</p>
+                        <div class="card-footer">
+                            ${project.url ? `<a href="${project.url}" target="_blank" class="card-link">Abrir →</a>` : '<div></div>'}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateTimestamp() {
+            const now = new Date().toLocaleTimeString('es-ES');
+            document.getElementById('last-update').textContent = now;
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const isDark = html.classList.toggle('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            document.getElementById('theme-icon').textContent = isDark ? '☀️' : '🌙';
+        }
+
+        function initTheme() {
+            const saved = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const isDark = saved === 'dark' || (saved === null && prefersDark);
+
+            if (isDark) {
+                document.documentElement.classList.add('dark');
+                document.getElementById('theme-icon').textContent = '☀️';
+            } else {
+                document.getElementById('theme-icon').textContent = '🌙';
+            }
+        }
+
+        initTheme();
+        updateStatus();
+        setInterval(updateStatus, 30000);
+    </script>
+</body>
+</html>
