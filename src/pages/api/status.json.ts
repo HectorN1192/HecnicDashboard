@@ -39,9 +39,15 @@ function queryDocker(path: string): Promise<unknown> {
 
 export async function GET() {
   try {
-    const containers = (await queryDocker('/v1.41/containers/json?all=true')) as ContainerInfo[];
+    const result = await queryDocker('/v1.41/containers/json?all=true');
 
+    if (!Array.isArray(result)) {
+      throw new Error('Docker API did not return array of containers');
+    }
+
+    const containers = result as ContainerInfo[];
     const status: DockerStatus = {};
+
     containers.forEach((container) => {
       const name = container.Names[0]?.replace(/^\//, '') || container.Id.slice(0, 12);
       status[name] = container.State;
@@ -56,7 +62,7 @@ export async function GET() {
   } catch (error) {
     console.error('Error querying Docker:', error);
     return new Response(
-      JSON.stringify({ error: 'Unable to query Docker daemon' }),
+      JSON.stringify({ error: 'Unable to query Docker daemon', details: String(error) }),
       {
         status: 500,
         headers: {
