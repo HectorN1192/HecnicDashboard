@@ -1,0 +1,129 @@
+---
+import ProjectCard from '../components/ProjectCard.astro';
+import { projects } from '../data/projects';
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hecnic Dashboard</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+          'Helvetica Neue', Arial, sans-serif;
+        padding: 2rem;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      header {
+        text-align: center;
+        color: white;
+        margin-bottom: 3rem;
+      }
+
+      header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      header p {
+        font-size: 1.1rem;
+        opacity: 0.9;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+      }
+
+      .footer {
+        text-align: center;
+        color: white;
+        margin-top: 3rem;
+        opacity: 0.8;
+        font-size: 0.9rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>🎯 Hecnic Dashboard</h1>
+        <p>Portal de acceso a todos los proyectos</p>
+      </header>
+
+      <div class="grid" id="projects-grid">
+        {
+          projects.map((project) => (
+            <ProjectCard project={project} />
+          ))
+        }
+      </div>
+
+      <div class="footer">
+        <p>Última actualización: <span id="last-update">Cargando...</span></p>
+      </div>
+    </div>
+
+    <script>
+      async function updateStatus() {
+        try {
+          const response = await fetch('/dashboard/api/status.json');
+          const status = await response.json();
+
+          // Actualizar timestamp
+          const now = new Date().toLocaleTimeString('es-ES');
+          document.getElementById('last-update').textContent = now;
+
+          // Para cada proyecto con contenedor, actualizar su estado
+          const cards = document.querySelectorAll('.bg-white');
+          cards.forEach((card) => {
+            const projectName =
+              card.querySelector('.text-xl')?.textContent || '';
+            // Buscar el contenedor correspondiente en el estado
+            for (const [containerName, containerStatus] of Object.entries(
+              status
+            )) {
+              // Mapeo simple: si el nombre del proyecto está en el nombre del contenedor
+              if (containerName.includes(projectName.toLowerCase())) {
+                const statusDot = card.querySelector('.rounded-full');
+                const statusLabel = card.querySelector('.text-xs');
+
+                if (statusDot && statusLabel) {
+                  const isRunning = containerStatus === 'running';
+                  statusDot.className =
+                    'w-3 h-3 rounded-full ' +
+                    (isRunning ? 'bg-green-500' : 'bg-yellow-500');
+                  statusLabel.textContent = isRunning ? 'Activo' : 'Detenido';
+                }
+              }
+            }
+          });
+        } catch (error) {
+          console.error('Error updating status:', error);
+        }
+      }
+
+      // Actualizar estado al cargar la página
+      updateStatus();
+
+      // Actualizar cada 30 segundos
+      setInterval(updateStatus, 30000);
+    </script>
+  </body>
+</html>
