@@ -62,7 +62,7 @@ export async function GET() {
   } catch (error) {
     console.error('Error querying Docker:', error);
     return new Response(
-      JSON.stringify({ error: 'Unable to query Docker daemon', details: String(error) }),
+      JSON.stringify({ error: 'Unable to query Docker daemon' }),
       {
         status: 500,
         headers: {
