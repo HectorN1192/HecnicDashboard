@@ -22,10 +22,10 @@ export const projects: Project[] = [
     tag: 'Producción',
   },
   {
-    name: 'CuentasPersonales',
+    name: 'HFinanzas',
     description: 'Gestión de finanzas personales',
-    url: null,
-    container: null,
+    url: 'https://hfinanzas.construccioneshecnic.es',
+    container: 'hfinance-web',
     tag: 'En desarrollo',
   },
 ];
