@@ -67,9 +67,9 @@ interface Project {
 
 ## Routing
 
-- **Acceso:** `http://51.255.197.166/dashboard`
-- **Caddy config:** Bloque IP `51.255.197.166 { handle /dashboard* { ... } }` en Caddyfile
-- **Base URL en Astro:** `/dashboard` (ver `astro.config.mjs`)
+- **Acceso:** `https://hdashboard.construccioneshecnic.es`
+- **Caddy config:** `hdashboard.construccioneshecnic.es { reverse_proxy localhost:8082 }` — sin strip de prefijo
+- **Base URL en Astro:** `/` (raíz, sin base path)
 
 ## Despliegue
 

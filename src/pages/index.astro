@@ -337,7 +337,7 @@
 
         async function updateStatus() {
             try {
-                const response = await fetch('/dashboard/api/status.json');
+                const response = await fetch('/api/status.json');
                 if (response.ok) {
                     containerStatus = await response.json();
                 }
