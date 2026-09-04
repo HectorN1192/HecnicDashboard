@@ -21,6 +21,9 @@ rsync -avz --delete \
 echo "→ Construyendo y reiniciando dashboard..."
 ssh "$REMOTE" "cd $REMOTE_HECNICAPP && docker compose up -d --build dashboard"
 
+echo "→ Limpiando imágenes Docker huérfanas..."
+ssh "$REMOTE" "docker image prune -f"
+
 echo "✓ Deploy de HDashboard completado"
 echo ""
 echo "Acceso: https://hdashboard.construccioneshecnic.es"
