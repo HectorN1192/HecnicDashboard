@@ -12,7 +12,7 @@ Portal interno accesible por IP para centralizar el acceso a todos los proyectos
 ## Acceso
 
 ```
-http://51.255.197.166/dashboard
+https://hdashboard.construccioneshecnic.es
 ```
 
 ## Desarrollo
@@ -29,7 +29,7 @@ npm install
 npm run dev
 ```
 
-Abre http://localhost:3000 (o el puerto que indique Astro)
+Abre http://localhost:4321 (puerto por defecto de Astro)
 
 ### Build
 
@@ -37,23 +37,23 @@ Abre http://localhost:3000 (o el puerto que indique Astro)
 npm run build
 ```
 
-El resultado estático va a `dist/`.
+El resultado SSR (server + adaptador Node) va a `dist/`.
 
 ## Despliegue
 
-El dashboard está dockerizado y se despliega automáticamente con:
+El dashboard está dockerizado. Deploy manual e independiente desde este repo:
 
 ```bash
 ./deploy.sh
 ```
 
-en el directorio `HecnicApp/`.
+También se despliega automáticamente al hacer push a `main` (GitHub Actions). El servicio `dashboard` está definido en el `docker-compose` de HecnicApp; ambos flujos ejecutan `docker compose up -d --build dashboard` en el VPS.
 
 ### Estructura Docker
 
 - **Puerto interno:** 4321
-- **Puerto host (loopback):** 127.0.0.1:8082
-- **Caddy routing:** `51.255.197.166/dashboard` → localhost:8082
+- **Puerto host:** 8082
+- **Caddy routing:** `hdashboard.construccioneshecnic.es` → localhost:8082 (sin strip de prefijo)
 
 ## Configuración
 
@@ -70,6 +70,7 @@ export const projects: Project[] = [
     url: "https://ejemplo.com",
     container: "mi-contenedor",  // o null si no tiene servicio
     tag: "En desarrollo",
+    accent: "#3b82f6",           // color de acento de la tarjeta
   },
 ];
 ```
@@ -78,7 +79,7 @@ Redeploy para que los cambios se vean.
 
 ### API de Estado
 
-El endpoint `/dashboard/api/status.json` devuelve el estado de todos los contenedores:
+El endpoint `/api/status.json` devuelve el estado de todos los contenedores (Docker Engine API `GET /v1.44/containers/json?all=true` vía socket):
 
 ```json
 {
@@ -108,7 +109,7 @@ ssh ubuntu@51.255.197.166
 docker exec hecnic-dashboard curl --unix-socket /var/run/docker.sock http://v1.41/containers/json
 ```
 
-Si devuelve un error de permisos, revisar que el volumen esté montado correctamente en `compose.yaml`.
+Si devuelve un error de permisos, revisar que el volumen del socket esté montado correctamente en el servicio `dashboard` del `docker-compose` de HecnicApp.
 
 ### El contenedor no inicia
 
